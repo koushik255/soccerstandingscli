@@ -36,9 +36,9 @@ impl Widget for &App {
         " Current Standings.\n\
                 {}\n ",
             teams_stand,);
-
-        let scraped_standings = self.standings.clone();
-
+        //
+        // let scraped_standings = self.standings.clone();
+        //
 
         let paragraph = Paragraph::new(text)
             .block(block.clone())
@@ -51,16 +51,16 @@ impl Widget for &App {
             .fg(Color::Cyan)
             .bg(Color::Black)
             .centered();
-
-        let scraped = Paragraph::new(scraped_standings)
-            .fg(Color::Cyan)
-            .bg(Color::Black)
-            .centered();
+        //
+        // let scraped = Paragraph::new(scraped_standings)
+        //     .fg(Color::Cyan)
+        //     .bg(Color::Black)
+        //     .centered();
 
        
         paragraph.render(area, buf);
          standings.render(area,buf);
-         scraped.render(area,buf);
+         // scraped.render(area,buf);
         
     }
 }

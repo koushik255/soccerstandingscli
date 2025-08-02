@@ -145,7 +145,15 @@ impl App {
     /// because i would just have to webscrape but been there done that doesnt really work well
     /// cloudflare
     pub fn change(&mut self) {
+        let standings = self.standings.clone();
         if let Some(arsenal_team) = self.teams.get_mut("Arsenal"){
+           let new_name:Vec<String> = standings.lines()
+        .filter(|line| line.contains("Arsenal"))
+        .map(|line| line.to_string())
+        .collect();
+              
+           
+           arsenal_team.name = new_name.first().unwrap().to_string();
             arsenal_team.position = 3;
         }
         if let Some(mancity_team) = self.teams.get_mut("ManCity"){
@@ -198,7 +206,11 @@ impl App {
     }
 
    
-
+// i honestyl really think that putting this into a text file then just using filesystem and
+// assigned each position to each team would be better than this
+//
+// or i just return it in a String, ok well self.standings is already a string i can just clone the
+// results of that?
 
 pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Error>> {
     let link = "https://onefootball.com/en/competition/premier-league-9/table";
@@ -233,6 +245,9 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             let losses = stats[5].text().collect::<String>().trim().to_string();
             let goal_diff = stats[6].text().collect::<String>().trim().to_string();
             let points = stats[7].text().collect::<String>().trim().to_string();
+            // i need a way to just said certain information, or i need to parse the text 
+            // parseing the text would be easier i think and i could run that format for all of the
+            // teams since they all have the same format
             
             standings.push_str(&format!("| {:<8} | {:<16} | {:<6} | {:<4} | {:<5} | {:<6} | {:<14} | {:<6} |\n", 
                      position, team, played, wins, draws, losses, goal_diff, points));
@@ -242,6 +257,7 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     
     standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
     self.standings = standings;
+    self.change();
     
     Ok(())
 }
