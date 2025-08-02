@@ -38,6 +38,9 @@ pub enum AppEvent {
     Double,
     /// Quit the application.
     Change,
+    Swap,
+    ShowStand,
+        
 
     Quit,
 }

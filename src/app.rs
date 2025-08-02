@@ -8,6 +8,8 @@ use ratatui::{
     crossterm::event::{KeyCode, KeyEvent, KeyModifiers},
 };
 
+use scraper::{Html,Selector};
+
 /// Application.
 #[derive(Debug)]
 pub struct App {
@@ -18,6 +20,7 @@ pub struct App {
     /// Event handler.
     pub events: EventHandler,
     pub teams : HashMap<String,Team>,
+    pub standings: String,
 }
 
 
@@ -51,11 +54,12 @@ impl Default for App {
             counter: 0,
             events: EventHandler::new(),
             teams,
+            standings: String::new(),
            
         }
     }
 }
-#[derive(Debug,Default)]
+#[derive(Debug,Default,Clone)]
 pub struct Team {
         name: String,
         position: i64,
@@ -69,7 +73,7 @@ impl App {
    
 
     /// Run the application's main loop.
-    pub async fn run(mut self, mut terminal: DefaultTerminal) -> color_eyre::Result<()> {
+    pub async fn run(mut self, mut terminal: DefaultTerminal) -> color_eyre::Result<(),Box <dyn std::error::Error>> {
         while self.running {
             terminal.draw(|frame| frame.render_widget(&self, frame.area()))?;
             match self.events.next().await? {
@@ -81,6 +85,8 @@ impl App {
                     AppEvent::Decrement => self.decrement_counter(),
                     AppEvent::Double => self.double(),
                     AppEvent::Change=> self.change(),
+                    AppEvent::Swap=> self.blud(),
+                    AppEvent::ShowStand =>self.scrape_standings().await?,
                 
                     AppEvent::Quit => self.quit(),
                 },
@@ -100,6 +106,8 @@ impl App {
             KeyCode::Left => self.events.send(AppEvent::Decrement),
             KeyCode::Up => self.events.send(AppEvent::Double),
             KeyCode::Char('a')=> self.events.send(AppEvent::Change),
+            KeyCode::Char('b') => self.events.send(AppEvent::Swap),
+            KeyCode::Char('u') => self.events.send(AppEvent::ShowStand),
             // Other handlers you could add here.
             _ => {}
         }
@@ -150,20 +158,94 @@ impl App {
        
     }
     // maybe i can append them to a list in order? 
+    //
+
+    pub fn blud(&mut self) {
+        if let Some(manutd_team) = self.teams.get_mut("ManUtd") {
+            manutd_team.position = 1;
+        }
+        if let Some(mancity_team) = self.teams.get_mut("ManCity") {
+            mancity_team.position = 2;
+        }
+
+    }
     
 
     pub fn get_standings(&self) -> String {
         let mut teams: Vec<&Team> = self.teams.values().collect();
 
         teams.sort_by_key(|team| team.position);
-
+       
         let mut standings_string = String::from("");
         for team in teams.iter(){
             standings_string.push_str(&format!("{}. {}\n",team.position,team.name,)
-                );
+             );
         }
         standings_string
     }
 
+
+    pub fn scrape_main() -> Result<(),Box<dyn std::error::Error>> {
+        let url = "https://onefootball.com/en/competition/premier-league-9/table";
+        let response = reqwest::blocking::get(url)?;
+
+        println!("Response Status : {}", response.status());
+
+        let body = response.text()?;
+        println!("REsponse length: {}",body.len());
+
+        Ok(())
+    }
+
+   
+
+
+pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Error>> {
+    let link = "https://onefootball.com/en/competition/premier-league-9/table";
+    
+    let response = reqwest::get(link).await?.text().await?;
+    let document = Html::parse_document(&response);
+    
+    let row_selector = Selector::parse("li.Standing_standings__row__5sdZG").unwrap();
+    let position_selector = Selector::parse("div.Standing_standings__cell__5Kd0W").unwrap();
+    let team_name_selector = Selector::parse("p.Standing_standings__teamName__psv61").unwrap();
+    
+    let mut standings = String::new();
+    standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
+    standings.push_str("| Position | Team             | Played | Wins | Draws | Losses | Goal Difference| Points |\n");
+    standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
+
+    for row in document.select(&row_selector) {
+        let position = row.select(&position_selector).next()
+            .map(|e| e.text().collect::<String>().trim().to_string())
+            .unwrap_or_default();
+            
+        let team = row.select(&team_name_selector).next()
+            .map(|e| e.text().collect::<String>().trim().to_string())
+            .unwrap_or_default();
+        
+        let stats: Vec<_> = row.select(&position_selector).collect();
+        
+        if stats.len() >= 8 {
+            let played = stats[2].text().collect::<String>().trim().to_string();
+            let wins = stats[3].text().collect::<String>().trim().to_string();
+            let draws = stats[4].text().collect::<String>().trim().to_string();
+            let losses = stats[5].text().collect::<String>().trim().to_string();
+            let goal_diff = stats[6].text().collect::<String>().trim().to_string();
+            let points = stats[7].text().collect::<String>().trim().to_string();
+            
+            standings.push_str(&format!("| {:<8} | {:<16} | {:<6} | {:<4} | {:<5} | {:<6} | {:<14} | {:<6} |\n", 
+                     position, team, played, wins, draws, losses, goal_diff, points));
+           
+        }
+    }
+    
+    standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
+    self.standings = standings;
+    
+    Ok(())
+}
+
+   
 
 }
