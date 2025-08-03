@@ -60,7 +60,7 @@ impl Widget for &App {
         let team_and_point_list: Vec<ListItem> = teams_and_points
             .iter()
             .map(|(team,points)| {
-                ListItem::new(format!("{}: {}",team,points))
+                ListItem::new(format!("{:?}: {:?}",team,points))
             })
         .collect();
 

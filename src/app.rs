@@ -21,7 +21,7 @@ pub struct App {
     pub events: EventHandler,
     pub teams : HashMap<String,Team>,
     pub standings: String,
-    pub teampoint: HashMap<String,String>,
+    pub teampoint: HashMap<String,TeamStats>,
 }
 
 
@@ -33,6 +33,7 @@ impl Default for App {
             Team {
                 name: "arsenal".to_string(),
                 position: 1,
+               
             },
         );
         teams.insert(
@@ -40,6 +41,8 @@ impl Default for App {
             Team {
                 name: "ManCity".to_string(),
                 position: 2,
+                
+        
             }, 
         );
         teams.insert(
@@ -47,6 +50,7 @@ impl Default for App {
             Team {
                 name: "ManUtd".to_string(),
                 position: 3,
+                
             },
         );
         let  teampoint = HashMap::new();
@@ -66,8 +70,15 @@ impl Default for App {
 pub struct Team {
         name: String,
         position: i64,
+       
     }
 
+#[derive(Debug,Default,Clone)]
+pub struct TeamStats{
+    points:String,
+    wins:String,
+    losses:String,
+}
 impl App {
     /// Constructs a new instance of [`App`].
     pub fn new() -> Self {
@@ -158,17 +169,31 @@ impl App {
             let mut  tp = self.teampoint.clone();
             let team_point = tp.drain();
 
-            for (t,_v) in team_point{
+            for (t,v) in team_point{
                 if t =="Arsenal"{
                     arsenal_team.name = t;
+                } 
+
+                if v.wins == *"0".to_string(){
+                    arsenal_team.position = 4;
                 }
+
             }
            
            // arsenal_team.name = new_name.first().unwrap().to_string();
-            arsenal_team.position = 3;
+            // arsenal_team.position = 3;
         }
         if let Some(mancity_team) = self.teams.get_mut("ManCity"){
             mancity_team.position = 1;
+
+            let mut tp = self.teampoint.clone();
+            let team_point = tp.drain();
+
+            for (t,_v) in team_point{
+                if t =="Manchester City"{
+                    mancity_team.name = t;
+                }
+            }
         }
 
         if let Some(manutd_team) = self.teams.get_mut("ManUtd") {
@@ -272,7 +297,12 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             // i need a way to just said certain information, or i need to parse the text 
             // parseing the text would be easier i think and i could run that format for all of the
             // teams since they all have the same format
-            self.teampoint.insert(team.clone(),points.clone());
+            self.teampoint.insert(team.clone(),TeamStats{
+                points: points.clone(),
+                wins: wins.clone(),
+                losses : losses.clone()
+            
+            });
             
             standings.push_str(&format!("| {:<8} | {:<16} | {:<6} | {:<4} | {:<5} | {:<6} | {:<14} | {:<6} |\n", 
                      position, team, played, wins, draws, losses, goal_diff, points));
