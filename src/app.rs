@@ -33,6 +33,9 @@ impl Default for App {
             Team {
                 name: "arsenal".to_string(),
                 position: 1,
+                points:"".to_string(),
+                wins: "".to_string(),
+                losses: "".to_string(),
                
             },
         );
@@ -41,6 +44,10 @@ impl Default for App {
             Team {
                 name: "ManCity".to_string(),
                 position: 2,
+                points:"".to_string(),
+                wins: "".to_string(),
+                losses: "".to_string(),
+
                 
         
             }, 
@@ -50,6 +57,9 @@ impl Default for App {
             Team {
                 name: "ManUtd".to_string(),
                 position: 3,
+                points:"".to_string(),
+                wins: "".to_string(),
+                losses: "".to_string(),
                 
             },
         );
@@ -70,6 +80,9 @@ impl Default for App {
 pub struct Team {
         name: String,
         position: i64,
+        points: String,
+        wins: String,
+        losses: String,
        
     }
 
@@ -156,12 +169,11 @@ impl App {
     /// have to make 20 different calls to set the team position for each team
     /// also if i were to use a api i could get all the other data alwell for the team, 
     /// of course i could start with the soccer api but then later i could just migrate to my own 
-    /// because i would just have to webscrape but been there done that doesnt really work well
-    /// cloudflare
+    /// because i would just have to webscrape but been there done that doesnt really work well cloudflare
     pub fn change(&mut self) {
         let standings = self.standings.clone();
         if let Some(arsenal_team) = self.teams.get_mut("Arsenal"){
-           let new_name:Vec<String> = standings.lines()
+           let _new_name:Vec<String> = standings.lines()
         .filter(|line| line.contains("Arsenal"))
         .map(|line| line.to_string())
         .collect();
@@ -169,6 +181,9 @@ impl App {
             let mut  tp = self.teampoint.clone();
             let team_point = tp.drain();
 
+        
+
+           
             for (t,v) in team_point{
                 if t =="Arsenal"{
                     arsenal_team.name = t;
@@ -176,7 +191,15 @@ impl App {
 
                 if v.wins == *"0".to_string(){
                     arsenal_team.position = 4;
+                    
                 }
+                // im trying to set the team variable to the result of the team_point hash
+                
+                arsenal_team.points = v.points;
+                arsenal_team.wins = v.wins;
+                arsenal_team.losses = v.losses;
+                
+                
 
             }
            
@@ -222,7 +245,7 @@ impl App {
        
         let mut standings_string = String::from("");
         for team in teams.iter(){
-            standings_string.push_str(&format!("{}. {}\n",team.position,team.name,)
+            standings_string.push_str(&format!("{}. {} {} {} {}\n",team.position,team.name,team.wins,team.losses,team.points)
              );
         }
         standings_string
