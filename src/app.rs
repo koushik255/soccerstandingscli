@@ -21,6 +21,7 @@ pub struct App {
     pub events: EventHandler,
     pub teams : HashMap<String,Team>,
     pub standings: String,
+    pub teampoint: HashMap<String,String>,
 }
 
 
@@ -30,7 +31,7 @@ impl Default for App {
         teams.insert(
             "Arsenal".to_string(),
             Team {
-                name: "Arsenal".to_string(),
+                name: "arsenal".to_string(),
                 position: 1,
             },
         );
@@ -48,6 +49,7 @@ impl Default for App {
                 position: 3,
             },
         );
+        let  teampoint = HashMap::new();
 
         Self {
             running: true,
@@ -55,6 +57,7 @@ impl Default for App {
             events: EventHandler::new(),
             teams,
             standings: String::new(),
+            teampoint,
            
         }
     }
@@ -152,8 +155,16 @@ impl App {
         .map(|line| line.to_string())
         .collect();
               
+            let mut  tp = self.teampoint.clone();
+            let team_point = tp.drain();
+
+            for (t,_v) in team_point{
+                if t =="Arsenal"{
+                    arsenal_team.name = t;
+                }
+            }
            
-           arsenal_team.name = new_name.first().unwrap().to_string();
+           // arsenal_team.name = new_name.first().unwrap().to_string();
             arsenal_team.position = 3;
         }
         if let Some(mancity_team) = self.teams.get_mut("ManCity"){
@@ -211,6 +222,18 @@ impl App {
 //
 // or i just return it in a String, ok well self.standings is already a string i can just clone the
 // results of that?
+// ok if i parse the string with the name of the team then 
+// -- i could make this function consitant for all the teams because they follow the same format
+// i would be able to connect the points with the acuatly team struct 
+// Finding another way (it must exist)
+// what if i made a function which took everything then printed the values into a hashmap while 
+// assigning each value to the proper team, althorugh i dont think this would work because
+// how would i , maybe it would read the string and then print out just the team and points
+// then i would be able to easially assign these, but then that makes for more functin calls which
+// is more api calls so more waiting, it would be much better do beable to run just this function
+// below for scraping, so parseing the string would be the best method for that but im still not
+// convinced, wait if im getting returend the team and points i should easilly be able to match
+// them up
 
 pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Error>> {
     let link = "https://onefootball.com/en/competition/premier-league-9/table";
@@ -221,7 +244,8 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     let row_selector = Selector::parse("li.Standing_standings__row__5sdZG").unwrap();
     let position_selector = Selector::parse("div.Standing_standings__cell__5Kd0W").unwrap();
     let team_name_selector = Selector::parse("p.Standing_standings__teamName__psv61").unwrap();
-    
+
+       
     let mut standings = String::new();
     standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
     standings.push_str("| Position | Team             | Played | Wins | Draws | Losses | Goal Difference| Points |\n");
@@ -248,6 +272,7 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             // i need a way to just said certain information, or i need to parse the text 
             // parseing the text would be easier i think and i could run that format for all of the
             // teams since they all have the same format
+            self.teampoint.insert(team.clone(),points.clone());
             
             standings.push_str(&format!("| {:<8} | {:<16} | {:<6} | {:<4} | {:<5} | {:<6} | {:<14} | {:<6} |\n", 
                      position, team, played, wins, draws, losses, goal_diff, points));
