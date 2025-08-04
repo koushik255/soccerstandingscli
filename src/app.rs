@@ -63,6 +63,183 @@ impl Default for App {
                 
             },
         );
+        teams.insert(
+            "Lvpl".to_string(),
+            Team{
+            name: "Lvpl".to_string(),
+            position:4,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+        teams.insert(
+            "Sund".to_string(),
+            Team{
+            name: "Sund".to_string(),
+            position:4,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "Evr".to_string(),
+            Team{
+            name: "Evr".to_string(),
+            position:4,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+        teams.insert(
+            "Crys".to_string(),
+            Team{
+            name: "Crys".to_string(),
+            position:4,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "Leed".to_string(),
+            Team{
+            name: "Leed".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+        teams.insert(
+            "Tott".to_string(),
+            Team{
+            name: "Tott".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "Bren".to_string(),
+            Team{
+            name: "Bren".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "West".to_string(),
+            Team{
+            name: "West".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "Fulh".to_string(),
+            Team{
+            name: "Fulh".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+          teams.insert(
+            "BHA".to_string(),
+            Team{
+            name: "BHA".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+           teams.insert(
+            "Asvi".to_string(),
+            Team{
+            name: "Asvi".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+            teams.insert(
+            "Chel".to_string(),
+            Team{
+            name: "Chel".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "AFCB".to_string(),
+            Team{
+            name: "AFCB".to_string(),
+            position:4,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+          teams.insert(
+            "Burn".to_string(),
+            Team{
+            name: "Burn".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "NUFC".to_string(),
+            Team{
+            name: "NUFC".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+          teams.insert(
+            "NOTT".to_string(),
+            Team{
+            name: "NOTT".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            },
+        );
+         teams.insert(
+            "wolf".to_string(),
+            Team{
+            name: "wolf".to_string(),
+            position:0,
+            points: "".to_string(),
+            wins: "".to_string(),
+            losses: "".to_string(),
+            
+            },
+        );
+        
+
+          
+    
+
+
         let  teampoint = HashMap::new();
 
         Self {
@@ -91,6 +268,8 @@ pub struct TeamStats{
     points:String,
     wins:String,
     losses:String,
+    stand: i64,
+   
 }
 impl App {
     /// Constructs a new instance of [`App`].
@@ -171,6 +350,32 @@ impl App {
             self.set_team_vars("Arsenal","AFC");
             self.set_team_vars("Manchester United","ManUtd");
             self.set_team_vars("Manchester City", "ManCity");
+            self.set_team_vars("Liverpool FC","Lvpl");
+            self.set_team_vars("Sunderland","Sund");
+            self.set_team_vars("Everton","Evr");
+            self.set_team_vars("Crystal Palace","Crys");
+            self.set_team_vars("Leeds United","Leed");
+            self.set_team_vars("Tottenham Hotspur","Tott");
+            self.set_team_vars("Brentford", "Bren");
+            self.set_team_vars("West Ham United", "West");
+            self.set_team_vars("Fulham","Fulh");
+            self.set_team_vars("Brighton & Hove Albion", "BHA");
+            self.set_team_vars("Aston Villa","Asvi");
+            self.set_team_vars("Chelsea","Chel");
+            self.set_team_vars("AFC Bournemouth","AFCB");
+            self.set_team_vars("Burnley","Burn");
+            self.set_team_vars("Newcastle United","NUFC");
+            self.set_team_vars("Nottingham Forest","NOTT");
+            self.set_team_vars("Wolverhampton Wanderers","wolf");
+
+
+        
+
+
+
+
+
+
 
     }
     // maybe i can append them to a list in order? 
@@ -250,11 +455,12 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             // i need a way to just said certain information, or i need to parse the text 
             // parseing the text would be easier i think and i could run that format for all of the
             // teams since they all have the same format
+            let stand_val = position.clone().parse::<i64>().unwrap();
             self.teampoint.insert(team.clone(),TeamStats{
                 points: points.clone(),
                 wins: wins.clone(),
-                losses : losses.clone()
-            
+                losses : losses.clone(),
+                stand : stand_val,
             });
             
             standings.push_str(&format!("| {:<8} | {:<16} | {:<6} | {:<4} | {:<5} | {:<6} | {:<14} | {:<6} |\n", 
@@ -284,6 +490,8 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             this_team.wins = v.wins;
             this_team.losses = v.losses;
             this_team.points = v.points;
+            this_team.position = v.stand;
+            
             
             }
         }

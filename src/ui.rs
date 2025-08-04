@@ -28,7 +28,7 @@ impl Widget for &App {
             let teams_stand = self.get_standings(); 
             
 
-        let teams_and_points = self.teampoint.clone();
+        //let teams_and_points = self.teampoint.clone();
 
         
 
@@ -57,24 +57,24 @@ impl Widget for &App {
         //     .bg(Color::Black)
         //     .centered();
             //
-        let team_and_point_list: Vec<ListItem> = teams_and_points
-            .iter()
-            .map(|(team,points)| {
-                ListItem::new(format!("{:?}: {:?}",team,points))
-            })
-        .collect();
+      //  let team_and_point_list: Vec<ListItem> = teams_and_points
+       //     .iter()
+      //      .map(|(team,points)| {
+      //          ListItem::new(format!("{:?}: {:?}",team,points))
+      //      })
+     //   .collect();
 
-        let list = List::new(team_and_point_list)
-            .block(block.clone())
-            .fg(Color::Cyan)
-            .bg(Color::Black);
+       // let list = List::new(team_and_point_list)
+      //      .block(block.clone())
+        //    .fg(Color::Cyan)
+        //    .bg(Color::Black);
 
 
        
         paragraph.render(area, buf);
          standings.render(area,buf);
          // scraped.render(area,buf);
-         list.render(area,buf);
+        // list.render(area,buf);
         
     }
 }

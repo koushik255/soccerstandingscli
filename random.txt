@@ -1,0 +1,22 @@
+╭──────────────────────────────────────────────────────────────────────────────────────────july32───────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                               │
+│"Sunderland": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                │
+│"Everton": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                  │
+│"Crystal Palace": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                           │
+│"Leeds United": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                          │
+│"Tottenham Hotspur": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                     │
+│"Brentford": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                             │
+                                                                                                                  │
+│"West Ham United": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                       │
+│"Fulham": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                                │
+                                                                                                                │
+│"Brighton & Hove Albion": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                │
+│"Aston Villa": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                           │
+                                                                                                                       │
+│"Chelsea": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                               │
+│"AFC Bournemouth": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                       │
+│"Burnley": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                               │
+│"Newcastle United": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                      │
+│"Nottingham Forest": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                     │
+│"Wolverhampton Wanderers": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                               │
+│
