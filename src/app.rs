@@ -165,11 +165,7 @@ impl App {
         self.counter = self.counter.saturating_add(2)   ;
     }
 
-    /// now i just need a way to get the live positions, i could just use a api then i would just
-    /// have to make 20 different calls to set the team position for each team
-    /// also if i were to use a api i could get all the other data alwell for the team, 
-    /// of course i could start with the soccer api but then later i could just migrate to my own 
-    /// because i would just have to webscrape but been there done that doesnt really work well cloudflare
+    
     pub fn change(&mut self) {
                
             self.set_team_vars("Arsenal","AFC");
@@ -216,25 +212,6 @@ impl App {
 
         Ok(())
     }
-
-   
-// i honestyl really think that putting this into a text file then just using filesystem and
-// assigned each position to each team would be better than this
-//
-// or i just return it in a String, ok well self.standings is already a string i can just clone the
-// results of that?
-// ok if i parse the string with the name of the team then 
-// -- i could make this function consitant for all the teams because they follow the same format
-// i would be able to connect the points with the acuatly team struct 
-// Finding another way (it must exist)
-// what if i made a function which took everything then printed the values into a hashmap while 
-// assigning each value to the proper team, althorugh i dont think this would work because
-// how would i , maybe it would read the string and then print out just the team and points
-// then i would be able to easially assign these, but then that makes for more functin calls which
-// is more api calls so more waiting, it would be much better do beable to run just this function
-// below for scraping, so parseing the string would be the best method for that but im still not
-// convinced, wait if im getting returend the team and points i should easilly be able to match
-// them up
 
 pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Error>> {
     let link = "https://onefootball.com/en/competition/premier-league-9/table";
