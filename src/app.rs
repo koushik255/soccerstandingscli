@@ -21,7 +21,7 @@ pub struct App {
     pub events: EventHandler,
     pub teams : HashMap<String,Team>,
     pub standings: String,
-    pub teampoint: HashMap<String,TeamStats>,
+    pub teampoint: HashMap<String,TeamStats>
 }
 
 
@@ -29,9 +29,9 @@ impl Default for App {
     fn default() -> Self {
         let mut teams = HashMap::new();
         teams.insert(
-            "Arsenal".to_string(),
+            "AFC".to_string(),
             Team {
-                name: "arsenal".to_string(),
+                name: "AFC".to_string(),
                 position: 1,
                 points:"".to_string(),
                 wins: "".to_string(),
@@ -171,58 +171,11 @@ impl App {
     /// of course i could start with the soccer api but then later i could just migrate to my own 
     /// because i would just have to webscrape but been there done that doesnt really work well cloudflare
     pub fn change(&mut self) {
-        let standings = self.standings.clone();
-        if let Some(arsenal_team) = self.teams.get_mut("Arsenal"){
-           let _new_name:Vec<String> = standings.lines()
-        .filter(|line| line.contains("Arsenal"))
-        .map(|line| line.to_string())
-        .collect();
-              
-            let mut  tp = self.teampoint.clone();
-            let team_point = tp.drain();
+               
+            self.set_team_vars("Arsenal","AFC");
+            self.set_team_vars("Manchester United","ManUtd");
+            self.set_team_vars("Manchester City", "ManCity");
 
-        
-
-           
-            for (t,v) in team_point{
-                if t =="Arsenal"{
-                    arsenal_team.name = t;
-                } 
-
-                if v.wins == *"0".to_string(){
-                    arsenal_team.position = 4;
-                    
-                }
-                // im trying to set the team variable to the result of the team_point hash
-                
-                arsenal_team.points = v.points;
-                arsenal_team.wins = v.wins;
-                arsenal_team.losses = v.losses;
-                
-                
-
-            }
-           
-           // arsenal_team.name = new_name.first().unwrap().to_string();
-            // arsenal_team.position = 3;
-        }
-        if let Some(mancity_team) = self.teams.get_mut("ManCity"){
-            mancity_team.position = 1;
-
-            let mut tp = self.teampoint.clone();
-            let team_point = tp.drain();
-
-            for (t,_v) in team_point{
-                if t =="Manchester City"{
-                    mancity_team.name = t;
-                }
-            }
-        }
-
-        if let Some(manutd_team) = self.teams.get_mut("ManUtd") {
-            manutd_team.position= 2;
-        }
-       
     }
     // maybe i can append them to a list in order? 
     //
@@ -339,6 +292,29 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     
     Ok(())
 }
+
+
+    pub fn set_team_vars(&mut self,team: &str,teamnik: &str) {
+        if let Some(this_team) = self.teams.get_mut(teamnik){
+        let mut tp = self.teampoint.clone();
+        let team_point = tp.drain();
+
+        for (t,v) in team_point {
+            
+            
+            if t == team {
+            this_team.name = t;
+            this_team.wins = v.wins;
+            this_team.losses = v.losses;
+            this_team.points = v.points;
+            
+            }
+        }
+     }
+                
+    
+
+    }
 
    
 
