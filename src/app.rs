@@ -290,9 +290,9 @@ impl App {
                     AppEvent::Increment => self.increment_counter(),
                     AppEvent::Decrement => self.decrement_counter(),
                     AppEvent::Double => self.double(),
-                    AppEvent::Change=> self.change(),
+                    AppEvent::Change=> self.change().await,
                     AppEvent::Swap=> self.blud(),
-                    AppEvent::ShowStand =>self.scrape_standings().await?,
+                    AppEvent::ShowStand =>self.get_standings(),//self.scrape_standings().await?
                     AppEvent::SortWin => self.get_standings_wins(),
                 
                     AppEvent::Quit => self.quit(),
@@ -347,8 +347,9 @@ impl App {
     }
 
     
-    pub fn change(&mut self) {
-               
+    pub async fn change(&mut self) {
+
+            self.scrape_standings().await.expect("error web");
             self.set_team_vars("Arsenal","AFC");
             self.set_team_vars("Manchester United","ManUtd");
             self.set_team_vars("Manchester City", "ManCity");
@@ -393,7 +394,7 @@ impl App {
     }
     
 
-    pub fn get_standings(&mut self) -> String {
+    pub fn get_standings(&mut self)  {
         let mut teams: Vec<&Team> = self.teams.values().collect();
 
         teams.sort_by_key(|team| team.position);
@@ -404,8 +405,7 @@ impl App {
              );
         }
         self.standings= standings.clone();
-        standings
-    }
+            }
 
     // what if i made the standings string a state so then i could just update the state?
     // the current standings is the html standings,nvm it does nothing
@@ -498,7 +498,7 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
     //self.standings = standings;
 
-    self.change();
+    //self.change();
     self.get_standings();   
     Ok(())
 }
@@ -531,7 +531,11 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
 // i want to add sorting methods so that you can chose like the way the 
 // teams are listed depending on the different attributes,
 // make arsenals text golden because best team ofc
-// 
+// Sorting methods -wins, suposeedly done but im not sure so i can wait till season starts for that
+// I should probably implement a cacheing system, so i dont need to call the html function
+// everytime which i assume the program is doing atleast every time i click U it does
+// Ok yeah i did that, 'a' will fetch the html, then with 'u' and 'o' you can switch change the
+// state / how you sort the teams
 
    
 

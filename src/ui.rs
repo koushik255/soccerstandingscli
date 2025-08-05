@@ -1,9 +1,9 @@
 use ratatui::{
-    buffer::Buffer,
-    layout::{Alignment, Rect},
-    style::{Color, Stylize},
-    widgets::{Block, BorderType, Paragraph, Widget,},
+    buffer::Buffer, layout::{Alignment, Rect}, style::Styled, widgets::{Block, BorderType, Paragraph, Widget,}
+    
 };
+use ratatui::text::{Line,Span,Text};
+use ratatui::style::{Color,Style};
 
 use crate::app::App;
 
@@ -20,7 +20,7 @@ impl Widget for &App {
             .title_alignment(Alignment::Center)
             .border_type(BorderType::Rounded);
 
-        let text =  "".to_string();
+       
     // so i have to render the objects in order of their position
     // that really does not seem to diffucult
     //
@@ -36,25 +36,12 @@ impl Widget for &App {
         
 
         let rankings = format!( 
-        " Current Standings.\n\
-                {}\n ",
-        current_standings,);
+        " Current Standings.\n {}\n ",current_standings,);
 
-               //
-        // let scraped_standings = self.standings.clone();
-        //
-
-        let paragraph = Paragraph::new(text)
+            let standings = Paragraph::new(Text::from(rankings))
             .block(block.clone())
-            .fg(Color::Cyan)
-            .bg(Color::Black)
-            .centered();
-
-        let standings = Paragraph::new(rankings)
-            
-            .fg(Color::Cyan)
-            .bg(Color::Black)
-            .centered();
+            .alignment(Alignment::Center)
+            .wrap(ratatui::widgets::Wrap{trim :false});
         //
         // let scraped = Paragraph::new(scraped_standings)
         //     .fg(Color::Cyan)
@@ -74,8 +61,7 @@ impl Widget for &App {
         //    .bg(Color::Black);
 
 
-       
-        paragraph.render(area, buf);
+      
          standings.render(area,buf);
          // scraped.render(area,buf);
         // list.render(area,buf);
