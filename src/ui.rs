@@ -2,7 +2,7 @@ use ratatui::{
     buffer::Buffer,
     layout::{Alignment, Rect},
     style::{Color, Stylize},
-    widgets::{Block, BorderType, ListItem, Paragraph, Widget,List},
+    widgets::{Block, BorderType, Paragraph, Widget,},
 };
 
 use crate::app::App;
@@ -25,8 +25,11 @@ impl Widget for &App {
     // that really does not seem to diffucult
     //
             
-            let teams_stand = self.get_standings(); 
-            
+           // let teams_stand = self.get_standings(); 
+            //let teams_stand_wins = self.get_standings_wins();  
+
+
+            let current_standings = self.standings.clone();
 
         //let teams_and_points = self.teampoint.clone();
 
@@ -35,8 +38,9 @@ impl Widget for &App {
         let rankings = format!( 
         " Current Standings.\n\
                 {}\n ",
-            teams_stand,);
-        //
+        current_standings,);
+
+               //
         // let scraped_standings = self.standings.clone();
         //
 

@@ -21,7 +21,7 @@ pub struct App {
     pub events: EventHandler,
     pub teams : HashMap<String,Team>,
     pub standings: String,
-    pub teampoint: HashMap<String,TeamStats>
+    pub teampoint: HashMap<String,TeamStats>,
 }
 
 
@@ -293,6 +293,7 @@ impl App {
                     AppEvent::Change=> self.change(),
                     AppEvent::Swap=> self.blud(),
                     AppEvent::ShowStand =>self.scrape_standings().await?,
+                    AppEvent::SortWin => self.get_standings_wins(),
                 
                     AppEvent::Quit => self.quit(),
                 },
@@ -314,6 +315,7 @@ impl App {
             KeyCode::Char('a')=> self.events.send(AppEvent::Change),
             KeyCode::Char('b') => self.events.send(AppEvent::Swap),
             KeyCode::Char('u') => self.events.send(AppEvent::ShowStand),
+            KeyCode::Char('o') => self.events.send(AppEvent::SortWin),
             // Other handlers you could add here.
             _ => {}
         }
@@ -376,7 +378,6 @@ impl App {
 
 
 
-
     }
     // maybe i can append them to a list in order? 
     //
@@ -392,18 +393,43 @@ impl App {
     }
     
 
-    pub fn get_standings(&self) -> String {
+    pub fn get_standings(&mut self) -> String {
         let mut teams: Vec<&Team> = self.teams.values().collect();
 
         teams.sort_by_key(|team| team.position);
        
-        let mut standings_string = String::from("");
+        let mut standings= String::from("");
         for team in teams.iter(){
-            standings_string.push_str(&format!("{}. {} {} {} {}\n",team.position,team.name,team.wins,team.losses,team.points)
+            standings.push_str(&format!("{}. {} {} {} {}\n",team.position,team.name,team.wins,team.losses,team.points)
              );
         }
-        standings_string
+        self.standings= standings.clone();
+        standings
     }
+
+    // what if i made the standings string a state so then i could just update the state?
+    // the current standings is the html standings,nvm it does nothing
+    // if i just 
+    //
+
+    pub fn get_standings_wins(&mut self){
+    
+        let mut teams: Vec<&Team> = self.teams.values().collect();
+        teams.sort_by_key(|team| team.wins.clone());
+
+        let mut standings = String::new();
+
+        for team in teams.iter(){
+            standings.push_str(&format!("{}. {} {} {} {}\n",team.position,team.name,team.wins,team.losses,team.points));
+        
+        }
+        self.standings= standings.clone();
+
+       
+
+    }
+
+
 
 
     pub fn scrape_main() -> Result<(),Box<dyn std::error::Error>> {
@@ -470,9 +496,10 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     }
     
     standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
-    self.standings = standings;
+    //self.standings = standings;
+
     self.change();
-    
+    self.get_standings();   
     Ok(())
 }
 
@@ -493,13 +520,18 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             this_team.position = v.stand;
             
             
-            }
+          }
         }
      }
-                
-    
+  }
 
-    }
+// next i should add well maybe the badges first,
+// or acually i want to add the badges at a later points because i dont resally
+// care about them right now anyways 
+// i want to add sorting methods so that you can chose like the way the 
+// teams are listed depending on the different attributes,
+// make arsenals text golden because best team ofc
+// 
 
    
 

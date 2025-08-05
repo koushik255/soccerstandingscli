@@ -40,6 +40,7 @@ pub enum AppEvent {
     Change,
     Swap,
     ShowStand,
+    SortWin,
         
 
     Quit,
