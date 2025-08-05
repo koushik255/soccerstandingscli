@@ -290,7 +290,7 @@ impl App {
                     AppEvent::Increment => self.increment_counter(),
                     AppEvent::Decrement => self.decrement_counter(),
                     AppEvent::Double => self.double(),
-                    AppEvent::Change=> self.change().await,
+                    AppEvent::Change=> self.scrape_standings().await?,
                     AppEvent::Swap=> self.blud(),
                     AppEvent::ShowStand =>self.get_standings(),//self.scrape_standings().await?
                     AppEvent::SortWin => self.get_standings_wins(),
@@ -349,7 +349,7 @@ impl App {
     
     pub async fn change(&mut self) {
 
-            self.scrape_standings().await.expect("error web");
+            //self.scrape_standings().await.expect("error web");
             self.set_team_vars("Arsenal","AFC");
             self.set_team_vars("Manchester United","ManUtd");
             self.set_team_vars("Manchester City", "ManCity");
@@ -498,7 +498,7 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
     standings.push_str("+----------+------------------+--------+------+-------+--------+----------------+--------+\n");
     //self.standings = standings;
 
-    //self.change();
+    self.change().await;
     self.get_standings();   
     Ok(())
 }
