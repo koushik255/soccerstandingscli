@@ -370,15 +370,6 @@ impl App {
             self.set_team_vars("Newcastle United","NUFC");
             self.set_team_vars("Nottingham Forest","NOTT");
             self.set_team_vars("Wolverhampton Wanderers","wolf");
-
-
-        
-
-
-
-
-
-
     }
     // maybe i can append them to a list in order? 
     //
@@ -518,25 +509,16 @@ pub async fn scrape_standings(&mut self)  -> Result<(), Box<dyn std::error::Erro
             this_team.losses = v.losses;
             this_team.points = v.points;
             this_team.position = v.stand;
-            
-            
           }
         }
      }
   }
 
+
+}
+
+
 // next i should add well maybe the badges first,
 // or acually i want to add the badges at a later points because i dont resally
 // care about them right now anyways 
-// i want to add sorting methods so that you can chose like the way the 
-// teams are listed depending on the different attributes,
-// make arsenals text golden because best team ofc
-// Sorting methods -wins, suposeedly done but im not sure so i can wait till season starts for that
-// I should probably implement a cacheing system, so i dont need to call the html function
-// everytime which i assume the program is doing atleast every time i click U it does
-// Ok yeah i did that, 'a' will fetch the html, then with 'u' and 'o' you can switch change the
-// state / how you sort the teams
 
-   
-
-}

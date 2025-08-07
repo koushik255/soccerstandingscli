@@ -1,6 +1,6 @@
 ╭──────────────────────────────────────────────────────────────────────────────────────────july32───────────────────────────────────────────────────────────────────────────────────────────╮
 │                                                                                               │
-│"Sunderland": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                │
+│                                                                                             │
 │"Everton": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                  │
 │"Crystal Palace": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                           │
 │"Leeds United": TeamStats { points: "0", wins: "0", losses: "0" }                                                                                                                          │
